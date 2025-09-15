@@ -10,15 +10,16 @@ body {
   margin:0;
   font-family:'Arial',sans-serif;
   text-align:center;
-  overflow:hidden;
+  overflow-x:hidden;
+  overflow-y:auto;
   background:linear-gradient(135deg,#ff9a9e,#fad0c4);
   transition: background 5s ease;
   position:relative;
 }
 h1{
   font-family:'Pacifico',cursive;
-  font-size:3rem;
-  margin-top:40px;
+  font-size:6vw;
+  margin-top:10vw;
   color:#d6336c;
   opacity:0;
   transition: opacity 1s ease;
@@ -26,19 +27,27 @@ h1{
 .message-bubble{
   display:inline-block;
   background:rgba(255,255,255,0.8);
-  padding:10px 20px;
+  padding:3vw 5vw;
   border-radius:25px;
-  margin:10px;
+  margin:3vw 1vw;
   opacity:0;
-  font-size:1.2rem;
+  font-size:4vw;
   position:relative;
   animation: floatUp 6s ease-in-out infinite;
   transition: opacity 1s ease;
+  max-width:80vw;
+  word-wrap:break-word;
+}
+#gallery {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:5vw;
 }
 #gallery img{
-  width:180px;
+  width:40vw;
   border-radius:20px;
-  margin:15px 5px;
+  margin:3vw 1vw;
   opacity:0;
   transition:all 1s ease;
   transform:scale(0.8);
@@ -47,26 +56,38 @@ button{
   background:#d6336c;
   color:white;
   border:none;
-  padding:15px 25px;
+  padding:3vw 5vw;
   border-radius:10px;
-  font-size:1.2rem;
+  font-size:4vw;
   cursor:pointer;
   transition:all 0.3s ease;
-  margin:10px;
+  margin:3vw 2vw;
   opacity:0;
 }
 button:hover{background:#a61e4d;}
 #musicBtn{
   position:fixed;
-  top:20px;right:20px;
+  top:5vw;right:5vw;
   background:#ff9a9e;
   border-radius:50%;
-  width:50px;height:50px;
+  width:12vw;height:12vw;
   border:none;
   cursor:pointer;
-  font-size:1.2rem;
+  font-size:5vw;
   box-shadow:0 0 10px rgba(0,0,0,0.3);
   z-index:9999;
+}
+#startHeart{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:20vw;
+  color:red;
+  cursor:pointer;
+  animation:beat 1s infinite alternate, glow 2s infinite alternate;
+  z-index:9999;
+  text-shadow: 0 0 10px rgba(255,0,0,0.7);
 }
 .confetti, .emoji, .heart, .star, .globo{
   position:fixed;
@@ -82,24 +103,12 @@ button:hover{background:#a61e4d;}
 }
 .globo{
   background:rgba(255,182,193,0.9);
-  padding:8px 15px;
+  padding:3vw;
   border-radius:50px;
-  font-size:14px;
+  font-size:4vw;
   color:#fff;
   font-weight:bold;
   white-space:nowrap;
-}
-#startHeart{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:80px;
-  color:red;
-  cursor:pointer;
-  animation:beat 1s infinite alternate, glow 2s infinite alternate;
-  z-index:9999;
-  text-shadow: 0 0 10px rgba(255,0,0,0.7);
 }
 @keyframes beat{
   0%{transform:translate(-50%,-50%) scale(1);}
@@ -171,15 +180,15 @@ button:hover{background:#a61e4d;}
 <div id="startHeart">❤️</div>
 
 <script>
-// Variables
+// Variables principales
 const bubbles=document.querySelectorAll('.message-bubble');
-const galleryImgs=document.querySelectorAll('#gallery img');
+const gallery=document.querySelectorAll('#gallery img');
 const music=document.getElementById('music');
 const startHeart=document.getElementById('startHeart');
 const h1=document.querySelector('h1');
 const buttons=document.querySelectorAll('button:not(#musicBtn)');
 
-// Inicio
+// Iniciar todo al tocar el corazón
 startHeart.addEventListener('click', ()=>{
   music.play();
   startHeart.style.display='none';
@@ -192,7 +201,7 @@ startHeart.addEventListener('click', ()=>{
   generarEstrellas();
 });
 
-// Mensajes tipo máquina de escribir
+// Función de máquina de escribir
 function typeWriter(el){
   const text=el.textContent;
   el.textContent='';
@@ -212,28 +221,27 @@ function iniciarMensajes(){
   });
 }
 
-// Galería automática
+// Galería rotativa
 let current=0;
 function iniciarGaleria(){
-  galleryImgs[current].style.opacity=1;
-  galleryImgs[current].style.transform='scale(1)';
+  gallery[current].style.opacity=1;
+  gallery[current].style.transform='scale(1)';
   setInterval(()=>{
-    galleryImgs[current].style.opacity=0;
-    galleryImgs[current].style.transform='scale(0.8)';
-    current=(current+1)%galleryImgs.length;
-    galleryImgs[current].style.opacity=1;
-    galleryImgs[current].style.transform='scale(1)';
+    gallery[current].style.opacity=0;
+    gallery[current].style.transform='scale(0.8)';
+    current=(current+1)%gallery.length;
+    gallery[current].style.opacity=1;
+    gallery[current].style.transform='scale(1)';
   },3000);
 }
 
 // Música
 function toggleMusic(){
-  const musicBtn=document.getElementById('musicBtn');
   if(music.paused){music.play(); musicBtn.textContent='🔇';}
   else{music.pause(); musicBtn.textContent='🎵';}
 }
 
-// Partículas y fuegos
+// Partículas y fuegos artificiales
 function lanzarParticulas(cant){
   for(let i=0;i<cant;i++){
     const type=Math.random();
@@ -337,5 +345,7 @@ document.body.addEventListener('click',(e)=>{
   generarGlobos();
 });
 </script>
+
 </body>
 </html>
+
