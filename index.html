@@ -10,10 +10,21 @@ body {
   margin:0;
   font-family:'Arial',sans-serif;
   text-align:center;
-  overflow-x:hidden;
+  overflow:hidden;
   background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-  transition: background 5s ease;
   position:relative;
+  height:100vh;
+}
+
+/* Contenedor central */
+#mainContainer{
+  position:relative;
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
 /* Titular */
@@ -22,38 +33,40 @@ h1{
   color:#d6336c;
   opacity:0;
   transition: opacity 1s ease;
+  margin-bottom:2vh;
+  text-align:center;
 }
 
 /* Mensajes */
 .message-bubble{
-  display:inline-block;
-  background:rgba(255,255,255,0.8);
-  padding:10px 20px;
+  display:block;
+  background:rgba(255,255,255,0.9);
+  padding:3vw 5vw;
   border-radius:25px;
-  margin:10px;
+  margin:1vh 0;
   opacity:0;
-  font-size:1.2rem;
-  position:relative;
-  animation: floatUp 6s ease-in-out infinite;
-  transition: opacity 1s ease;
-  max-width:500px;
+  font-size:4vw;
+  max-width:90vw;
+  text-align:center;
+  transform:scale(0.8);
+  transition:all 0.5s ease;
 }
 
 /* Galería */
 #gallery{
   display:flex;
-  flex-wrap:wrap;
   justify-content:center;
+  flex-wrap:nowrap;
   opacity:0;
-  transition:opacity 1s ease;
+  margin-top:2vh;
 }
 #gallery img{
-  width:180px;
-  border-radius:20px;
-  margin:15px 5px;
+  width:40vw;
+  margin:2vw 1vw;
+  border-radius:15px;
   opacity:0;
-  transition:all 1s ease;
   transform:scale(0.8);
+  transition:all 0.5s ease;
 }
 
 /* Botones */
@@ -61,24 +74,24 @@ button{
   background:#d6336c;
   color:white;
   border:none;
-  padding:15px 25px;
+  padding:3vw 5vw;
   border-radius:10px;
-  font-size:1.2rem;
+  font-size:4vw;
   cursor:pointer;
   transition:all 0.3s ease;
-  margin:10px;
+  margin:1vh 0;
   opacity:0;
 }
 button:hover{background:#a61e4d;}
 #musicBtn{
   position:fixed;
-  top:20px;right:20px;
+  top:3vw;right:3vw;
   background:#ff9a9e;
   border-radius:50%;
-  width:50px;height:50px;
+  width:12vw;height:12vw;
   border:none;
   cursor:pointer;
-  font-size:1.2rem;
+  font-size:4vw;
   box-shadow:0 0 10px rgba(0,0,0,0.3);
   z-index:9999;
 }
@@ -89,7 +102,7 @@ button:hover{background:#a61e4d;}
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  font-size:80px;
+  font-size:20vw;
   color:red;
   cursor:pointer;
   animation:beat 1s infinite alternate, glow 2s infinite alternate;
@@ -107,13 +120,8 @@ button:hover{background:#a61e4d;}
   50%{text-shadow:0 0 20px rgba(255,0,0,1),0 0 40px rgba(255,0,0,0.7);}
   100%{text-shadow:0 0 10px rgba(255,0,0,0.7),0 0 20px rgba(255,0,0,0.5);}
 }
-@keyframes floatUp{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-15px);}
-  100%{transform:translateY(0);}
-}
 
-/* Partículas */
+/* Partículas y globos */
 .confetti, .emoji, .heart, .star, .globo{
   position:fixed;
   pointer-events:none;
@@ -123,14 +131,12 @@ button:hover{background:#a61e4d;}
   width:12px;
   height:12px;
 }
-.emoji{
-  font-size:18px;
-}
+.emoji{font-size:4vw;}
 .globo{
   background:rgba(255,182,193,0.9);
-  padding:8px 15px;
+  padding:2vw 4vw;
   border-radius:50px;
-  font-size:14px;
+  font-size:3vw;
   color:#fff;
   font-weight:bold;
   white-space:nowrap;
@@ -163,25 +169,11 @@ button:hover{background:#a61e4d;}
   0%,100%{opacity:0;}
   50%{opacity:1;}
 }
-
-/* --- MEDIA QUERIES --- */
-@media (max-width:600px){
-  h1{font-size:8vw;margin-top:10vw;}
-  .message-bubble{font-size:4vw;padding:3vw 5vw;max-width:90vw;}
-  #gallery img{width:40vw;margin:3vw 1vw;}
-  button{font-size:4vw;padding:3vw 5vw;}
-  #startHeart{font-size:20vw;}
-}
-@media (min-width:601px){
-  h1{font-size:3rem;margin-top:40px;}
-  .message-bubble{font-size:1.2rem;padding:10px 20px;max-width:500px;}
-  #gallery img{width:180px;margin:15px 5px;}
-  button{font-size:1.2rem;padding:15px 25px;}
-  #startHeart{font-size:80px;}
-}
 </style>
 </head>
 <body>
+
+<div id="mainContainer">
 
 <h1>🎉 ¡Feliz Cumpleaños, mi amor! 🎉</h1>
 
@@ -203,16 +195,16 @@ button:hover{background:#a61e4d;}
 <button onclick="mostrarSecreto()">Mensaje secreto 💌</button>
 <button onclick="mostrarCarta()">Abrir carta ✉️</button>
 
+</div>
+
 <audio id="music" loop>
   <source src="AmorMio.mp3" type="audio/mpeg">
 </audio>
 <button id="musicBtn" onclick="toggleMusic()">🔇</button>
 
-<!-- Corazón inicial -->
 <div id="startHeart">❤️</div>
 
 <script>
-// Variables
 const bubbles=document.querySelectorAll('.message-bubble');
 const gallery=document.querySelectorAll('#gallery img');
 const music=document.getElementById('music');
@@ -220,20 +212,19 @@ const startHeart=document.getElementById('startHeart');
 const h1=document.querySelector('h1');
 const buttons=document.querySelectorAll('button:not(#musicBtn)');
 
-// Inicio al tocar corazón
 startHeart.addEventListener('click', ()=>{
-  music.play().catch(()=>{}); // evita errores por autoplay bloqueado
+  music.play().catch(()=>{});
   startHeart.style.display='none';
   h1.style.opacity=1;
   document.getElementById('messages').style.opacity=1;
   document.getElementById('gallery').style.opacity=1;
-  buttons.forEach(btn => btn.style.opacity=1);
+  buttons.forEach(btn=>btn.style.opacity=1);
   iniciarMensajes();
   iniciarGaleria();
   generarEstrellas();
 });
 
-// Tipo máquina de escribir
+// Máquina de escribir
 function typeWriter(el){
   const text=el.textContent;
   el.textContent='';
@@ -242,18 +233,19 @@ function typeWriter(el){
     el.textContent+=text.charAt(i);
     i++;
     if(i>=text.length) clearInterval(interval);
-  },40);
+  },50);
 }
 function iniciarMensajes(){
   bubbles.forEach((bubble,i)=>{
     setTimeout(()=>{
       bubble.style.opacity=1;
+      bubble.style.transform='scale(1)';
       typeWriter(bubble);
-    }, i*3000); // 3 segundos entre mensajes
+    }, i*2500);
   });
 }
 
-// Galería automática
+// Galería secuencial
 let current=0;
 function iniciarGaleria(){
   gallery[current].style.opacity=1;
