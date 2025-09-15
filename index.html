@@ -33,7 +33,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   min-height: 100vh;
   position: relative;
   z-index: 1;
@@ -84,8 +84,7 @@ h1 {
 /* Galería tipo Instagram */
 .gallery-container {
   width: 100%;
-  max-width: 400px;
-  height: 300px;
+  max-width: 500px;
   position: relative;
   margin: 20px 0;
   overflow: hidden;
@@ -93,6 +92,11 @@ h1 {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   -webkit-user-select: none;
   user-select: none;
+  background: rgba(0, 0, 0, 0.05);
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .gallery-slide {
@@ -106,6 +110,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
 }
 
 .gallery-slide.active {
@@ -113,10 +118,11 @@ h1 {
 }
 
 .gallery-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 15px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .gallery-nav {
@@ -131,7 +137,7 @@ h1 {
 }
 
 .gallery-nav button {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.7);
   border: none;
   width: 40px;
   height: 40px;
@@ -143,10 +149,11 @@ h1 {
   cursor: pointer;
   transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .gallery-nav button:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .gallery-dots {
@@ -223,6 +230,12 @@ h1 {
   justify-content: center;
   align-items: center;
   -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#musicBtn.visible {
+  opacity: 1;
 }
 
 /* Corazón inicial */
@@ -364,11 +377,56 @@ h1 {
     }
   }
 }
+
+/* Indicador de carga de imágenes */
+.image-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #f0f0f0;
+  border-radius: 15px;
+  color: #d6336c;
+  font-weight: bold;
+}
+
+/* Mensaje de error */
+.error-message {
+  color: #d6336c;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 0;
+  max-width: 90%;
+}
+
+/* Contenido oculto inicialmente */
+.hidden-content {
+  display: none;
+}
+
+/* Efecto de revelación */
+.reveal-content {
+  animation: reveal 1s forwards;
+}
+
+@keyframes reveal {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 </style>
 </head>
 <body>
 
-<div id="mainContainer">
+<!-- Contenido oculto inicialmente -->
+<div id="mainContainer" class="hidden-content">
   <h1>🎉 ¡Feliz Cumpleaños, mi amor! 🎉</h1>
 
   <div id="messages">
@@ -379,19 +437,19 @@ h1 {
 
   <div class="gallery-container">
     <div class="gallery-slide active">
-      <img src="photo1.jpg" alt="Nuestra foto 1">
+      <div class="image-loading">Cargando foto 1...</div>
     </div>
     <div class="gallery-slide">
-      <img src="photo2.jpg" alt="Nuestra foto 2">
+      <div class="image-loading">Cargando foto 2...</div>
     </div>
     <div class="gallery-slide">
-      <img src="photo3.jpg" alt="Nuestra foto 3">
+      <div class="image-loading">Cargando foto 3...</div>
     </div>
     <div class="gallery-slide">
-      <img src="photo4.jpg" alt="Nuestra foto 4">
+      <div class="image-loading">Cargando foto 4...</div>
     </div>
     <div class="gallery-slide">
-      <img src="photo5.jpg" alt="Nuestra foto 5">
+      <div class="image-loading">Cargando foto 5...</div>
     </div>
     
     <div class="gallery-nav">
@@ -428,13 +486,49 @@ h1 {
 const music = document.getElementById('music');
 const musicBtn = document.getElementById('musicBtn');
 const startHeart = document.getElementById('startHeart');
+const mainContainer = document.getElementById('mainContainer');
 const slides = document.querySelectorAll('.gallery-slide');
 const dots = document.querySelectorAll('.gallery-dot');
 let currentSlide = 0;
 let musicPlaying = false;
 
+// Nombres de archivos de imágenes
+const imageFiles = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg'];
+
+// Precargar y mostrar imágenes
+function loadImages() {
+  imageFiles.forEach((filename, index) => {
+    const img = new Image();
+    img.onload = function() {
+      // Reemplazar el indicador de carga con la imagen
+      slides[index].innerHTML = '';
+      slides[index].appendChild(img);
+      img.style.maxWidth = '100%';
+      img.style.maxHeight = '100%';
+      img.style.objectFit = 'contain';
+      img.style.borderRadius = '10px';
+      img.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+    };
+    img.onerror = function() {
+      // Mostrar mensaje de error si la imagen no se carga
+      slides[index].innerHTML = `<div class="error-message">Error al cargar: ${filename}</div>`;
+    };
+    img.src = filename;
+  });
+}
+
 // Iniciar todo al tocar corazón
 startHeart.addEventListener('click', () => {
+  // Revelar todo el contenido
+  mainContainer.classList.remove('hidden-content');
+  mainContainer.classList.add('reveal-content');
+  
+  // Cargar imágenes
+  loadImages();
+  
+  // Mostrar botón de música
+  musicBtn.classList.add('visible');
+  
   // Intentar reproducir música
   const playPromise = music.play();
   
@@ -657,15 +751,6 @@ function handleSwipe() {
     navGallery(-1);
   }
 }
-
-// Precargar imágenes para mejor rendimiento
-window.addEventListener('load', () => {
-  const images = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg'];
-  images.forEach(src => {
-    const img = new Image();
-    img.src = src;
-  });
-});
 </script>
 </body>
 </html>
