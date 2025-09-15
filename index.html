@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎉 Cumpleaños Épico ❤</title>
+<title>🎉 Cumpleaños Épico ❤️</title>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
 body {
@@ -11,44 +11,44 @@ body {
   font-family:'Arial',sans-serif;
   text-align:center;
   background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-  position:relative;
-  min-height:100vh;
-  overflow-x:hidden; /* Evita scroll horizontal */
+  overflow-x:hidden;
 }
 
-/* Contenedor central */
+/* Contenedor principal */
 #mainContainer{
   display:flex;
   flex-direction:column;
-  justify-content:center;
   align-items:center;
-  padding:5vw;
-  box-sizing:border-box;
+  justify-content:flex-start;
+  padding:5vw 2vw;
 }
 
-/* Titular */
+/* Título */
 h1{
   font-family:'Pacifico',cursive;
   color:#d6336c;
   opacity:0;
-  transition: opacity 1s ease;
-  margin-bottom:4vw;
-  text-align:center;
-  font-size:8vw; /* adaptable a celular */
-  line-height:1.2;
+  font-size:8vw;
+  margin-bottom:4vh;
+  transition: opacity 1s;
 }
 
 /* Mensajes */
+#messages{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
 .message-bubble{
   display:block;
   background:rgba(255,255,255,0.9);
-  padding:4vw 5vw;
+  padding:3vw 4vw;
   border-radius:25px;
-  margin:2vw 0;
+  margin:2vh 0;
   opacity:0;
   font-size:4vw;
-  max-width:100%; /* ocupa todo el ancho disponible */
-  box-sizing:border-box;
+  max-width:90vw;
   text-align:center;
   transform:scale(0.8);
   transition:all 0.5s ease;
@@ -57,16 +57,16 @@ h1{
 /* Galería */
 #gallery{
   display:flex;
-  justify-content:center;
-  flex-wrap:wrap; /* permite que las imágenes bajen si no caben */
-  gap:2vw;
-  opacity:0;
-  margin-top:4vw;
+  overflow-x:auto;
+  margin:4vh 0;
+  padding-bottom:2vh;
+  gap:3vw;
 }
 #gallery img{
-  width:45vw; /* ancho adaptable */
-  max-width:200px; /* límite máximo para pantallas grandes */
+  width:60vw;
+  max-width:200px;
   border-radius:15px;
+  flex-shrink:0;
   opacity:0;
   transform:scale(0.8);
   transition:all 0.5s ease;
@@ -82,10 +82,8 @@ button{
   font-size:4vw;
   cursor:pointer;
   transition:all 0.3s ease;
-  margin:2vw 0;
+  margin:2vh 0;
   opacity:0;
-  max-width:90%;
-  white-space:normal; /* evita que el texto se corte */
 }
 button:hover{background:#a61e4d;}
 #musicBtn{
@@ -126,12 +124,53 @@ button:hover{background:#a61e4d;}
   100%{text-shadow:0 0 10px rgba(255,0,0,0.7),0 0 20px rgba(255,0,0,0.5);}
 }
 
-/* Responsivo extra para pantallas muy pequeñas */
-@media (max-width: 400px){
-  h1{font-size:10vw;}
-  .message-bubble{font-size:5vw; padding:5vw;}
-  button{font-size:5vw; padding:4vw;}
-  #gallery img{width:90%; max-width:none;}
+/* Partículas y globos */
+.confetti, .emoji, .heart, .star, .globo{
+  position:fixed;
+  pointer-events:none;
+  z-index:9999;
+}
+.confetti, .heart, .star{
+  width:12px;
+  height:12px;
+}
+.emoji{font-size:4vw;}
+.globo{
+  background:rgba(255,182,193,0.9);
+  padding:2vw 4vw;
+  border-radius:50px;
+  font-size:3vw;
+  color:#fff;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+/* Fuegos artificiales */
+.firework{
+  position:absolute;
+  width:5px;height:5px;
+  background:#fff;
+  border-radius:50%;
+  pointer-events:none;
+  animation:fw 1s linear forwards;
+}
+@keyframes fw{
+  0%{opacity:1; transform:translate(0,0);}
+  100%{opacity:0; transform:translate(var(--x),var(--y));}
+}
+
+/* Estrellas */
+.starry{
+  position:absolute;
+  width:2px;height:2px;
+  background:white;
+  border-radius:50%;
+  opacity:0;
+  animation:blink 2s infinite;
+}
+@keyframes blink{
+  0%,100%{opacity:0;}
+  50%{opacity:1;}
 }
 </style>
 </head>
@@ -157,7 +196,7 @@ button:hover{background:#a61e4d;}
 
 <button onclick="mostrarSorpresa()">Sorpresa 🎁</button>
 <button onclick="mostrarSecreto()">Mensaje secreto 💌</button>
-<button onclick="mostrarCarta()">Abrir carta ✉</button>
+<button onclick="mostrarCarta()">Abrir carta ✉️</button>
 
 </div>
 
@@ -166,10 +205,174 @@ button:hover{background:#a61e4d;}
 </audio>
 <button id="musicBtn" onclick="toggleMusic()">🔇</button>
 
-<div id="startHeart">❤</div>
+<div id="startHeart">❤️</div>
 
 <script>
-// tu JS original aquí (no necesita cambios para adaptarse al móvil)
+// Variables
+const bubbles=document.querySelectorAll('.message-bubble');
+const gallery=document.querySelectorAll('#gallery img');
+const music=document.getElementById('music');
+const startHeart=document.getElementById('startHeart');
+const h1=document.querySelector('h1');
+const buttons=document.querySelectorAll('button:not(#musicBtn)');
+
+// Inicia todo al tocar corazón
+startHeart.addEventListener('click', ()=>{
+  music.play().catch(()=>{});
+  startHeart.style.display='none';
+  h1.style.opacity=1;
+  document.getElementById('messages').style.opacity=1;
+  document.getElementById('gallery').style.opacity=1;
+  buttons.forEach(btn=>btn.style.opacity=1);
+  iniciarMensajes();
+  iniciarGaleria();
+  generarEstrellas();
+});
+
+// Máquina de escribir
+function typeWriter(el){
+  const text=el.textContent;
+  el.textContent='';
+  let i=0;
+  const interval=setInterval(()=>{
+    el.textContent+=text.charAt(i);
+    i++;
+    if(i>=text.length) clearInterval(interval);
+  },50);
+}
+function iniciarMensajes(){
+  bubbles.forEach((bubble,i)=>{
+    setTimeout(()=>{
+      bubble.style.opacity=1;
+      bubble.style.transform='scale(1)';
+      typeWriter(bubble);
+    }, i*2500);
+  });
+}
+
+// Galería horizontal deslizable
+let current=0;
+function iniciarGaleria(){
+  gallery[current].style.opacity=1;
+  gallery[current].style.transform='scale(1)';
+  setInterval(()=>{
+    gallery[current].style.opacity=0;
+    gallery[current].style.transform='scale(0.8)';
+    current=(current+1)%gallery.length;
+    gallery[current].style.opacity=1;
+    gallery[current].style.transform='scale(1)';
+  },3500);
+}
+
+// Música
+function toggleMusic(){
+  if(music.paused){music.play(); musicBtn.textContent='🔇';}
+  else{music.pause(); musicBtn.textContent='🎵';}
+}
+
+// Partículas y fuegos
+function lanzarParticulas(cant){
+  for(let i=0;i<cant;i++){
+    const type=Math.random();
+    let el=document.createElement('div');
+    if(type<0.4){el.classList.add('confetti'); el.style.background=['#d6336c','#ff9a9e','#fad0c4','#ffb6b9'][Math.floor(Math.random()*4)];}
+    else if(type<0.6){el.classList.add('emoji'); el.textContent=['💖','🌸','🎊','✨'][Math.floor(Math.random()*4)];}
+    else if(type<0.8){el.classList.add('heart'); el.style.background='red'; el.style.width='10px'; el.style.height='10px'; el.style.borderRadius='50%';}
+    else{el.classList.add('star'); el.style.background='yellow'; el.style.width='8px'; el.style.height='8px'; el.style.borderRadius='50%';}
+    el.style.left=Math.random()*window.innerWidth+'px';
+    el.style.top=Math.random()*-50+'px';
+    document.body.appendChild(el);
+    animarParticula(el);
+  }
+}
+function animarParticula(el){
+  const speed=Math.random()*5+2;
+  let y=0;
+  const interval=setInterval(()=>{
+    y+=speed;
+    el.style.top=y+'px';
+    if(y>window.innerHeight){el.remove(); clearInterval(interval);}
+  },20);
+}
+function firework(x,y){
+  for(let i=0;i<30;i++){
+    const fw=document.createElement('div');
+    fw.classList.add('firework');
+    fw.style.left=x+'px';
+    fw.style.top=y+'px';
+    fw.style.setProperty('--x',(Math.random()*300-150)+'px');
+    fw.style.setProperty('--y',(Math.random()*300-150)+'px');
+    fw.style.background=['#ff0','#f0f','#0ff','#fff'][Math.floor(Math.random()*4)];
+    document.body.appendChild(fw);
+    setTimeout(()=>fw.remove(),1000);
+  }
+}
+
+// Botones
+function mostrarSorpresa(){
+  alert("Te amo con todo mi corazón ❤️");
+  document.body.style.background="linear-gradient(135deg,#ffdde1,#ee9ca7)";
+  h1.textContent="¡Eres lo mejor que me ha pasado! 💖";
+  lanzarParticulas(100);
+  firework(window.innerWidth/2,100);
+  generarGlobos();
+}
+function mostrarSecreto(){
+  const mensajes=['Eres mi persona favorita 💌','Cada día te quiero más 💖','Nunca cambies 🌸','Eres mi alegría 🎉'];
+  const msj=mensajes[Math.floor(Math.random()*mensajes.length)];
+  alert(msj);
+}
+function mostrarCarta(){
+  const carta=document.createElement('div');
+  carta.classList.add('globo');
+  carta.textContent="Querida, te amo más de lo que las palabras pueden decir 💖🌸🎉";
+  carta.style.left=(window.innerWidth/2 - 100)+'px';
+  carta.style.top=window.innerHeight+'px';
+  document.body.appendChild(carta);
+  let y=window.innerHeight;
+  const interval=setInterval(()=>{
+    y-=2;
+    carta.style.top=y+'px';
+    if(y<200){clearInterval(interval); setTimeout(()=>carta.remove(),4000);}
+  },10);
+}
+function generarGlobos(){
+  for(let i=0;i<5;i++){
+    const globo=document.createElement('div');
+    globo.classList.add('globo');
+    globo.textContent=['💖 Te adoro','🌸 Eres única','🎊 Felicidades','✨ Mi amor','💌 Siempre tú'][i];
+    globo.style.left=Math.random()*(window.innerWidth-100)+'px';
+    globo.style.top=window.innerHeight+'px';
+    document.body.appendChild(globo);
+    let y=window.innerHeight;
+    const interval=setInterval(()=>{
+      y-=2;
+      globo.style.top=y+'px';
+      if(y<150){clearInterval(interval); setTimeout(()=>globo.remove(),3000);}
+    },15);
+  }
+}
+
+// Estrellas
+function generarEstrellas(){
+  for(let i=0;i<50;i++){
+    const star=document.createElement('div');
+    star.classList.add('starry');
+    star.style.left=Math.random()*window.innerWidth+'px';
+    star.style.top=Math.random()*window.innerHeight+'px';
+    star.style.width=Math.random()*2+1+'px';
+    star.style.height=star.style.width;
+    star.style.animationDuration=(Math.random()*2+1)+'s';
+    document.body.appendChild(star);
+  }
+}
+
+// Click genera partículas y fuegos
+document.body.addEventListener('click',(e)=>{
+  lanzarParticulas(15);
+  firework(e.clientX,e.clientY);
+  generarGlobos();
+});
 </script>
 </body>
 </html>
