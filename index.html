@@ -19,23 +19,17 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-/* Contenedor principal centrado */
+/* Contenedor principal */
 #mainContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 1200px;
   min-height: 100vh;
   padding: 20px 10px;
-  position: relative;
-  z-index: 1;
 }
 
 /* Título */
@@ -45,7 +39,7 @@ h1 {
   opacity: 0;
   transition: opacity 1s ease;
   margin-bottom: 20px;
-  font-size: clamp(2rem, 8vw, 4rem);
+  font-size: clamp(2rem, 6vw, 4rem);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   padding: 0 10px;
 }
@@ -56,8 +50,6 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  opacity: 0;
-  transition: opacity 1s ease;
 }
 
 .message-bubble {
@@ -67,8 +59,7 @@ h1 {
   margin: 10px 0;
   opacity: 0;
   font-size: clamp(1rem, 4vw, 1.3rem);
-  width: 90%;
-  max-width: 600px;
+  max-width: 90%;
   text-align: center;
   transform: scale(0.8);
   transition: all 0.5s ease;
@@ -78,25 +69,28 @@ h1 {
 /* Galería */
 #gallery {
   display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
-  overflow: hidden;
+  gap: 15px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
   opacity: 0;
   margin: 20px 0;
   width: 100%;
   max-width: 1000px;
-  height: 200px;
+  padding: 10px;
 }
 
 #gallery img {
-  width: 0;
-  height: 180px;
-  margin: 0 5px;
+  flex: 0 0 auto;
+  width: 80%;
+  max-width: 300px;
+  scroll-snap-align: center;
   border-radius: 15px;
   opacity: 0;
   transform: scale(0.8);
   transition: all 0.5s ease;
   object-fit: cover;
+  aspect-ratio: 4/3;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -107,6 +101,7 @@ h1 {
   align-items: center;
   width: 100%;
   margin: 20px 0;
+  gap: 10px;
 }
 
 button {
@@ -118,9 +113,8 @@ button {
   font-size: clamp(1rem, 4vw, 1.2rem);
   cursor: pointer;
   transition: all 0.3s ease;
-  margin: 8px 0;
   opacity: 0;
-  width: 80%;
+  width: 90%;
   max-width: 300px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -132,15 +126,15 @@ button:hover {
 
 #musicBtn {
   position: fixed;
-  top: 15px;
-  right: 15px;
+  top: 10px;
+  right: 10px;
   background: #ff9a9e;
   border-radius: 50%;
   width: 50px;
   height: 50px;
   border: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 22px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 9999;
   display: flex;
@@ -151,11 +145,11 @@ button:hover {
 
 /* Corazón inicial */
 #startHeart {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: clamp(4rem, 20vw, 8rem);
+  font-size: clamp(4rem, 18vw, 8rem);
   color: red;
   cursor: pointer;
   animation: beat 1s infinite alternate, glow 2s infinite alternate;
@@ -175,69 +169,7 @@ button:hover {
   100% { text-shadow: 0 0 10px rgba(255, 0, 0, 0.7), 0 0 20px rgba(255, 0, 0, 0.5); }
 }
 
-/* Partículas y globos */
-.confetti, .emoji, .heart, .star, .globo {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.confetti, .heart, .star {
-  width: 12px;
-  height: 12px;
-}
-
-.emoji {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-}
-
-.globo {
-  background: rgba(255, 182, 193, 0.9);
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-size: clamp(0.9rem, 3vw, 1.1rem);
-  color: #fff;
-  font-weight: bold;
-  white-space: nowrap;
-  max-width: 80%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  z-index: 9999;
-}
-
-/* Fuegos artificiales */
-.firework {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: #fff;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: fw 1s linear forwards;
-}
-
-@keyframes fw {
-  0% { opacity: 1; transform: translate(0, 0); }
-  100% { opacity: 0; transform: translate(var(--x), var(--y)); }
-}
-
-/* Estrellas */
-.starry {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: white;
-  border-radius: 50%;
-  opacity: 0;
-  animation: blink 2s infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
-}
-
-/* Media queries para ajustes específicos */
+/* Media queries */
 @media (min-width: 768px) {
   .message-bubble {
     padding: 20px 30px;
@@ -245,17 +177,14 @@ button:hover {
   }
   
   #gallery {
-    height: 220px;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-x: hidden;
   }
   
   #gallery img {
-    height: 200px;
-    margin: 0 10px;
-  }
-  
-  button {
-    padding: 15px 30px;
-    width: auto;
+    width: 220px;
+    margin: 10px;
   }
   
   .buttons-container {
@@ -267,269 +196,12 @@ button:hover {
   
   .buttons-container button {
     width: auto;
-    margin: 5px;
-  }
-}
-
-@media (max-width: 480px) {
-  #gallery {
-    height: 150px;
-  }
-  
-  #gallery img {
-    height: 140px;
-    margin: 0 3px;
-  }
-  
-  .globo {
-    white-space: normal;
-    text-align: center;
   }
 }
 </style>
 </head>
 <body>
-
-<div id="mainContainer">
-  <h1>🎉 ¡Feliz Cumpleaños, mi amor! 🎉</h1>
-
-  <div id="messages">
-    <div class="message-bubble">Hoy quiero recordarte lo especial que eres 💕</div>
-    <div class="message-bubble">Gracias por todos los momentos que compartimos 💖</div>
-    <div class="message-bubble">Espero que tengas un día increíble lleno de amor 🌸</div>
-  </div>
-
-  <div id="gallery">
-    <img src="https://placehold.co/300x200/ff9a9e/white?text=Foto+1" alt="Foto1">
-    <img src="https://placehold.co/300x200/fad0c4/white?text=Foto+2" alt="Foto2">
-    <img src="https://placehold.co/300x200/d6336c/white?text=Foto+3" alt="Foto3">
-    <img src="https://placehold.co/300x200/ffb6b9/white?text=Foto+4" alt="Foto4">
-    <img src="https://placehold.co/300x200/a61e4d/white?text=Foto+5" alt="Foto5">
-  </div>
-
-  <div class="buttons-container">
-    <button onclick="mostrarSorpresa()">Sorpresa 🎁</button>
-    <button onclick="mostrarSecreto()">Mensaje secreto 💌</button>
-    <button onclick="mostrarCarta()">Abrir carta ✉️</button>
-  </div>
-</div>
-
-<audio id="music" loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-</audio>
-<button id="musicBtn" onclick="toggleMusic()">🔇</button>
-
-<div id="startHeart">❤️</div>
-
-<script>
-// Variables
-const bubbles = document.querySelectorAll('.message-bubble');
-const gallery = document.querySelectorAll('#gallery img');
-const music = document.getElementById('music');
-const startHeart = document.getElementById('startHeart');
-const h1 = document.querySelector('h1');
-const buttons = document.querySelectorAll('.buttons-container button');
-const messagesContainer = document.getElementById('messages');
-
-// Iniciar todo al tocar corazón
-startHeart.addEventListener('click', () => {
-  music.play().catch(() => {});
-  startHeart.style.display = 'none';
-  h1.style.opacity = 1;
-  messagesContainer.style.opacity = 1;
-  document.getElementById('gallery').style.opacity = 1;
-  buttons.forEach(btn => btn.style.opacity = 1);
-  iniciarMensajes();
-  iniciarGaleria();
-  generarEstrellas();
-});
-
-// Máquina de escribir
-function typeWriter(el) {
-  const text = el.textContent;
-  el.textContent = '';
-  let i = 0;
-  const interval = setInterval(() => {
-    el.textContent += text.charAt(i);
-    i++;
-    if (i >= text.length) clearInterval(interval);
-  }, 50);
-}
-
-function iniciarMensajes() {
-  bubbles.forEach((bubble, i) => {
-    setTimeout(() => {
-      bubble.style.opacity = 1;
-      bubble.style.transform = 'scale(1)';
-      typeWriter(bubble);
-    }, i * 2500);
-  });
-}
-
-// Galería horizontal adaptativa
-let current = 0;
-function iniciarGaleria() {
-  // Ajustar el ancho de las imágenes para que todas sean visibles
-  gallery.forEach(img => {
-    img.style.width = '18%';
-  });
-  
-  gallery[current].style.opacity = 1;
-  gallery[current].style.transform = 'scale(1)';
-  
-  setInterval(() => {
-    gallery[current].style.opacity = 0.5;
-    gallery[current].style.transform = 'scale(0.9)';
-    current = (current + 1) % gallery.length;
-    gallery[current].style.opacity = 1;
-    gallery[current].style.transform = 'scale(1)';
-  }, 3000);
-}
-
-// Música
-function toggleMusic() {
-  if (music.paused) {
-    music.play(); 
-    musicBtn.textContent = '🔊';
-  } else {
-    music.pause(); 
-    musicBtn.textContent = '🔇';
-  }
-}
-
-// Partículas y fuegos
-function lanzarParticulas(cant) {
-  for (let i = 0; i < cant; i++) {
-    const type = Math.random();
-    let el = document.createElement('div');
-    if (type < 0.4) {
-      el.classList.add('confetti'); 
-      el.style.background = ['#d6336c', '#ff9a9e', '#fad0c4', '#ffb6b9'][Math.floor(Math.random() * 4)];
-    } else if (type < 0.6) {
-      el.classList.add('emoji'); 
-      el.textContent = ['💖', '🌸', '🎊', '✨'][Math.floor(Math.random() * 4)];
-    } else if (type < 0.8) {
-      el.classList.add('heart'); 
-      el.style.background = 'red'; 
-      el.style.width = '10px'; 
-      el.style.height = '10px'; 
-      el.style.borderRadius = '50%';
-    } else {
-      el.classList.add('star'); 
-      el.style.background = 'yellow'; 
-      el.style.width = '8px'; 
-      el.style.height = '8px'; 
-      el.style.borderRadius = '50%';
-    }
-    el.style.left = Math.random() * window.innerWidth + 'px';
-    el.style.top = Math.random() * -50 + 'px';
-    document.body.appendChild(el);
-    animarParticula(el);
-  }
-}
-
-function animarParticula(el) {
-  const speed = Math.random() * 5 + 2;
-  let y = 0;
-  const interval = setInterval(() => {
-    y += speed;
-    el.style.top = y + 'px';
-    if (y > window.innerHeight) {
-      el.remove(); 
-      clearInterval(interval);
-    }
-  }, 20);
-}
-
-function firework(x, y) {
-  for (let i = 0; i < 30; i++) {
-    const fw = document.createElement('div');
-    fw.classList.add('firework');
-    fw.style.left = x + 'px';
-    fw.style.top = y + 'px';
-    fw.style.setProperty('--x', (Math.random() * 300 - 150) + 'px');
-    fw.style.setProperty('--y', (Math.random() * 300 - 150) + 'px');
-    fw.style.background = ['#ff0', '#f0f', '#0ff', '#fff'][Math.floor(Math.random() * 4)];
-    document.body.appendChild(fw);
-    setTimeout(() => fw.remove(), 1000);
-  }
-}
-
-// Botones
-function mostrarSorpresa() {
-  alert("Te amo con todo mi corazón ❤️");
-  document.body.style.background = "linear-gradient(135deg, #ffdde1, #ee9ca7)";
-  h1.textContent = "¡Eres lo mejor que me ha pasado! 💖";
-  lanzarParticulas(100);
-  firework(window.innerWidth / 2, 100);
-  generarGlobos();
-}
-
-function mostrarSecreto() {
-  const mensajes = ['Eres mi persona favorita 💌', 'Cada día te quiero más 💖', 'Nunca cambies 🌸', 'Eres mi alegría 🎉'];
-  const msj = mensajes[Math.floor(Math.random() * mensajes.length)];
-  alert(msj);
-}
-
-function mostrarCarta() {
-  const carta = document.createElement('div');
-  carta.classList.add('globo');
-  carta.textContent = "Querida, te amo más de lo que las palabras pueden decir 💖🌸🎉";
-  carta.style.left = '50%';
-  carta.style.top = window.innerHeight + 'px';
-  carta.style.transform = 'translateX(-50%)';
-  document.body.appendChild(carta);
-  let y = window.innerHeight;
-  const interval = setInterval(() => {
-    y -= 2;
-    carta.style.top = y + 'px';
-    if (y < 200) {
-      clearInterval(interval); 
-      setTimeout(() => carta.remove(), 4000);
-    }
-  }, 10);
-}
-
-function generarGlobos() {
-  for (let i = 0; i < 5; i++) {
-    const globo = document.createElement('div');
-    globo.classList.add('globo');
-    globo.textContent = ['💖 Te adoro', '🌸 Eres única', '🎊 Felicidades', '✨ Mi amor', '💌 Siempre tú'][i];
-    globo.style.left = Math.random() * (window.innerWidth - 100) + 'px';
-    globo.style.top = window.innerHeight + 'px';
-    document.body.appendChild(globo);
-    let y = window.innerHeight;
-    const interval = setInterval(() => {
-      y -= 2;
-      globo.style.top = y + 'px';
-      if (y < 150) {
-        clearInterval(interval); 
-        setTimeout(() => globo.remove(), 3000);
-      }
-    }, 15);
-  }
-}
-
-// Estrellas
-function generarEstrellas() {
-  for (let i = 0; i < 50; i++) {
-    const star = document.createElement('div');
-    star.classList.add('starry');
-    star.style.left = Math.random() * window.innerWidth + 'px';
-    star.style.top = Math.random() * window.innerHeight + 'px';
-    star.style.width = Math.random() * 2 + 1 + 'px';
-    star.style.height = star.style.width;
-    star.style.animationDuration = (Math.random() * 2 + 1) + 's';
-    document.body.appendChild(star);
-  }
-}
-
-// Click genera partículas y fuegos
-document.body.addEventListener('click', (e) => {
-  lanzarParticulas(15);
-  firework(e.clientX, e.clientY);
-  generarGlobos();
-});
-</script>
+  <!-- Aquí va tu contenido y el mismo JS -->
 </body>
 </html>
+
