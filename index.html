@@ -38,6 +38,8 @@ body {
   position: relative;
   z-index: 1;
   padding: 20px 0;
+  opacity: 0;
+  transition: opacity 1s ease;
 }
 
 /* Título */
@@ -49,8 +51,8 @@ h1 {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   padding: 0 10px;
   opacity: 0;
-  animation: fadeIn 1s forwards;
-  animation-delay: 0.5s;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
 }
 
 /* Mensajes */
@@ -60,6 +62,9 @@ h1 {
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
 }
 
 .message-bubble {
@@ -72,14 +77,7 @@ h1 {
   max-width: 400px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.8s forwards;
 }
-
-.message-bubble:nth-child(1) { animation-delay: 1s; }
-.message-bubble:nth-child(2) { animation-delay: 2s; }
-.message-bubble:nth-child(3) { animation-delay: 3s; }
 
 /* Galería tipo Instagram */
 .gallery-container {
@@ -97,6 +95,9 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
 }
 
 .gallery-slide {
@@ -106,7 +107,7 @@ h1 {
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.8s ease;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,37 +124,6 @@ h1 {
   object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.gallery-nav {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  padding: 0 10px;
-  z-index: 10;
-}
-
-.gallery-nav button {
-  background: rgba(255, 255, 255, 0.7);
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.gallery-nav button:hover {
-  background: rgba(255, 255, 255, 0.9);
 }
 
 .gallery-dots {
@@ -188,6 +158,9 @@ h1 {
   width: 100%;
   margin: 20px 0;
   gap: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
 }
 
 .action-btn {
@@ -202,40 +175,12 @@ h1 {
   width: 80%;
   max-width: 300px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  animation: fadeIn 0.8s forwards;
-  animation-delay: 4s;
   -webkit-tap-highlight-color: transparent;
 }
 
 .action-btn:hover {
   background: #a61e4d;
   transform: translateY(-2px);
-}
-
-#musicBtn {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  background: #ff9a9e;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  -webkit-tap-highlight-color: transparent;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-#musicBtn.visible {
-  opacity: 1;
 }
 
 /* Corazón inicial */
@@ -254,22 +199,6 @@ h1 {
 }
 
 /* Animaciones */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { 
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes beat {
   0% { transform: translate(-50%, -50%) scale(1); }
   100% { transform: translate(-50%, -50%) scale(1.2); }
@@ -366,16 +295,6 @@ h1 {
   #startHeart {
     font-size: 4rem;
   }
-  
-  /* Ajustes específicos para Safari iOS */
-  @media not all and (min-resolution:.001dpcm) { 
-    @supports (-webkit-appearance:none) {
-      .gallery-container {
-        -webkit-backface-visibility: hidden;
-        -webkit-transform: translateZ(0);
-      }
-    }
-  }
 }
 
 /* Indicador de carga de imágenes */
@@ -401,32 +320,36 @@ h1 {
   max-width: 90%;
 }
 
-/* Contenido oculto inicialmente */
-.hidden-content {
-  display: none;
+/* Control de música discreto */
+.music-control {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(255, 154, 158, 0.7);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
 }
 
-/* Efecto de revelación */
-.reveal-content {
-  animation: reveal 1s forwards;
-}
-
-@keyframes reveal {
-  from { 
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
-  }
+.music-control:hover {
+  opacity: 1;
 }
 </style>
 </head>
 <body>
 
-<!-- Contenido oculto inicialmente -->
-<div id="mainContainer" class="hidden-content">
+<div id="mainContainer">
   <h1>🎉 ¡Feliz Cumpleaños, mi amor! 🎉</h1>
 
   <div id="messages">
@@ -452,11 +375,6 @@ h1 {
       <div class="image-loading">Cargando foto 5...</div>
     </div>
     
-    <div class="gallery-nav">
-      <button onclick="navGallery(-1)">❮</button>
-      <button onclick="navGallery(1)">❯</button>
-    </div>
-    
     <div class="gallery-dots">
       <div class="gallery-dot active" onclick="showSlide(0)"></div>
       <div class="gallery-dot" onclick="showSlide(1)"></div>
@@ -477,20 +395,25 @@ h1 {
   <source src="AmorMio.mp3" type="audio/mpeg">
   Tu navegador no soporta el elemento de audio.
 </audio>
-<button id="musicBtn" onclick="toggleMusic()">🔇</button>
+<button id="musicControl" class="music-control" onclick="toggleMusic()">🔊</button>
 
 <div id="startHeart">❤️</div>
 
 <script>
 // Variables
 const music = document.getElementById('music');
-const musicBtn = document.getElementById('musicBtn');
+const musicControl = document.getElementById('musicControl');
 const startHeart = document.getElementById('startHeart');
 const mainContainer = document.getElementById('mainContainer');
+const title = document.querySelector('h1');
+const messages = document.getElementById('messages');
+const gallery = document.querySelector('.gallery-container');
+const buttons = document.querySelector('.buttons-container');
 const slides = document.querySelectorAll('.gallery-slide');
 const dots = document.querySelectorAll('.gallery-dot');
 let currentSlide = 0;
 let musicPlaying = false;
+let slideInterval;
 
 // Nombres de archivos de imágenes
 const imageFiles = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg'];
@@ -519,15 +442,34 @@ function loadImages() {
 
 // Iniciar todo al tocar corazón
 startHeart.addEventListener('click', () => {
-  // Revelar todo el contenido
-  mainContainer.classList.remove('hidden-content');
-  mainContainer.classList.add('reveal-content');
+  // Revelar todo el contenido con animaciones escalonadas
+  mainContainer.style.opacity = 1;
+  
+  setTimeout(() => {
+    title.style.opacity = 1;
+    title.style.transform = 'translateY(0)';
+  }, 300);
+  
+  setTimeout(() => {
+    messages.style.opacity = 1;
+    messages.style.transform = 'translateY(0)';
+  }, 600);
+  
+  setTimeout(() => {
+    gallery.style.opacity = 1;
+    gallery.style.transform = 'translateY(0)';
+  }, 900);
+  
+  setTimeout(() => {
+    buttons.style.opacity = 1;
+    buttons.style.transform = 'translateY(0)';
+  }, 1200);
   
   // Cargar imágenes
   loadImages();
   
-  // Mostrar botón de música
-  musicBtn.classList.add('visible');
+  // Iniciar el cambio automático de imágenes
+  startSlideShow();
   
   // Intentar reproducir música
   const playPromise = music.play();
@@ -536,20 +478,26 @@ startHeart.addEventListener('click', () => {
     playPromise
       .then(() => {
         musicPlaying = true;
-        musicBtn.textContent = '🔊';
+        musicControl.textContent = '🔊';
         startHeart.style.display = 'none';
         generarEstrellas();
       })
       .catch(error => {
         // En iOS, necesitamos una interacción del usuario para reproducir audio
         console.log("Reproducción automática prevenida:", error);
-        musicBtn.textContent = '🔇';
+        musicControl.textContent = '🔇';
         startHeart.style.display = 'none';
         generarEstrellas();
-        alert("Toca el botón de música en la esquina superior derecha para activar el sonido");
       });
   }
 });
+
+// Cambio automático de imágenes
+function startSlideShow() {
+  slideInterval = setInterval(() => {
+    navGallery(1);
+  }, 4000); // Cambia cada 4 segundos
+}
 
 // Navegación de galería
 function showSlide(n) {
@@ -560,6 +508,10 @@ function showSlide(n) {
   
   slides[currentSlide].classList.add('active');
   dots[currentSlide].classList.add('active');
+  
+  // Reiniciar el intervalo cuando se cambia manualmente
+  clearInterval(slideInterval);
+  startSlideShow();
 }
 
 function navGallery(direction) {
@@ -583,16 +535,16 @@ function toggleMusic() {
       playPromise
         .then(() => {
           musicPlaying = true;
-          musicBtn.textContent = '🔊';
+          musicControl.textContent = '🔊';
         })
         .catch(error => {
           console.log("Error al reproducir:", error);
-          musicBtn.textContent = '🔇';
+          musicControl.textContent = '🔇';
         });
     }
   } else {
     music.pause(); 
-    musicBtn.textContent = '🔇';
+    musicControl.textContent = '🔇';
     musicPlaying = false;
   }
 }
