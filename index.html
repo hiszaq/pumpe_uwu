@@ -19,6 +19,9 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Contenedor principal centrado */
@@ -28,8 +31,11 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
+  max-width: 1200px;
   min-height: 100vh;
   padding: 20px 10px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Título */
@@ -50,6 +56,8 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  opacity: 0;
+  transition: opacity 1s ease;
 }
 
 .message-bubble {
@@ -59,7 +67,8 @@ h1 {
   margin: 10px 0;
   opacity: 0;
   font-size: clamp(1rem, 4vw, 1.3rem);
-  max-width: 90%;
+  width: 90%;
+  max-width: 600px;
   text-align: center;
   transform: scale(0.8);
   transition: all 0.5s ease;
@@ -76,18 +85,18 @@ h1 {
   margin: 20px 0;
   width: 100%;
   max-width: 1000px;
+  height: 200px;
 }
 
 #gallery img {
-  width: 80%;
-  max-width: 300px;
-  margin: 0 10px;
+  width: 0;
+  height: 180px;
+  margin: 0 5px;
   border-radius: 15px;
   opacity: 0;
   transform: scale(0.8);
   transition: all 0.5s ease;
   object-fit: cover;
-  aspect-ratio: 4/3;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -142,7 +151,7 @@ button:hover {
 
 /* Corazón inicial */
 #startHeart {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -193,6 +202,7 @@ button:hover {
   max-width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
+  z-index: 9999;
 }
 
 /* Fuegos artificiales */
@@ -234,9 +244,13 @@ button:hover {
     max-width: 70%;
   }
   
+  #gallery {
+    height: 220px;
+  }
+  
   #gallery img {
-    width: 220px;
-    margin: 0 15px;
+    height: 200px;
+    margin: 0 10px;
   }
   
   button {
@@ -258,9 +272,13 @@ button:hover {
 }
 
 @media (max-width: 480px) {
+  #gallery {
+    height: 150px;
+  }
+  
   #gallery img {
-    width: 85%;
-    margin: 0 5px;
+    height: 140px;
+    margin: 0 3px;
   }
   
   .globo {
@@ -282,11 +300,11 @@ button:hover {
   </div>
 
   <div id="gallery">
-    <img src="photo1.jpg" alt="Foto1">
-    <img src="photo2.jpg" alt="Foto2">
-    <img src="photo3.jpg" alt="Foto3">
-    <img src="photo4.jpg" alt="Foto4">
-    <img src="photo5.jpg" alt="Foto5">
+    <img src="https://placehold.co/300x200/ff9a9e/white?text=Foto+1" alt="Foto1">
+    <img src="https://placehold.co/300x200/fad0c4/white?text=Foto+2" alt="Foto2">
+    <img src="https://placehold.co/300x200/d6336c/white?text=Foto+3" alt="Foto3">
+    <img src="https://placehold.co/300x200/ffb6b9/white?text=Foto+4" alt="Foto4">
+    <img src="https://placehold.co/300x200/a61e4d/white?text=Foto+5" alt="Foto5">
   </div>
 
   <div class="buttons-container">
@@ -297,7 +315,7 @@ button:hover {
 </div>
 
 <audio id="music" loop>
-  <source src="AmorMio.mp3" type="audio/mpeg">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 <button id="musicBtn" onclick="toggleMusic()">🔇</button>
 
@@ -311,13 +329,14 @@ const music = document.getElementById('music');
 const startHeart = document.getElementById('startHeart');
 const h1 = document.querySelector('h1');
 const buttons = document.querySelectorAll('.buttons-container button');
+const messagesContainer = document.getElementById('messages');
 
 // Iniciar todo al tocar corazón
 startHeart.addEventListener('click', () => {
   music.play().catch(() => {});
   startHeart.style.display = 'none';
   h1.style.opacity = 1;
-  document.getElementById('messages').style.opacity = 1;
+  messagesContainer.style.opacity = 1;
   document.getElementById('gallery').style.opacity = 1;
   buttons.forEach(btn => btn.style.opacity = 1);
   iniciarMensajes();
@@ -350,11 +369,17 @@ function iniciarMensajes() {
 // Galería horizontal adaptativa
 let current = 0;
 function iniciarGaleria() {
+  // Ajustar el ancho de las imágenes para que todas sean visibles
+  gallery.forEach(img => {
+    img.style.width = '18%';
+  });
+  
   gallery[current].style.opacity = 1;
   gallery[current].style.transform = 'scale(1)';
+  
   setInterval(() => {
-    gallery[current].style.opacity = 0;
-    gallery[current].style.transform = 'scale(0.8)';
+    gallery[current].style.opacity = 0.5;
+    gallery[current].style.transform = 'scale(0.9)';
     current = (current + 1) % gallery.length;
     gallery[current].style.opacity = 1;
     gallery[current].style.transform = 'scale(1)';
