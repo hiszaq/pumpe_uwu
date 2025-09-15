@@ -23,6 +23,7 @@ body {
   justify-content: center;
   align-items: center;
   padding: 10px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Contenedor principal */
@@ -90,6 +91,8 @@ h1 {
   overflow: hidden;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .gallery-slide {
@@ -139,6 +142,7 @@ h1 {
   font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .gallery-nav button:hover {
@@ -194,6 +198,7 @@ h1 {
   opacity: 0;
   animation: fadeIn 0.8s forwards;
   animation-delay: 4s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .action-btn:hover {
@@ -217,6 +222,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Corazón inicial */
@@ -231,6 +237,7 @@ h1 {
   animation: beat 1s infinite alternate, glow 2s infinite alternate;
   z-index: 9999;
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Animaciones */
@@ -346,6 +353,16 @@ h1 {
   #startHeart {
     font-size: 4rem;
   }
+  
+  /* Ajustes específicos para Safari iOS */
+  @media not all and (min-resolution:.001dpcm) { 
+    @supports (-webkit-appearance:none) {
+      .gallery-container {
+        -webkit-backface-visibility: hidden;
+        -webkit-transform: translateZ(0);
+      }
+    }
+  }
 }
 </style>
 </head>
@@ -362,19 +379,19 @@ h1 {
 
   <div class="gallery-container">
     <div class="gallery-slide active">
-      <img src="https://placehold.co/400x300/ff9a9e/white?text=Foto+1" alt="Foto1">
+      <img src="photo1.jpg" alt="Nuestra foto 1">
     </div>
     <div class="gallery-slide">
-      <img src="https://placehold.co/400x300/fad0c4/white?text=Foto+2" alt="Foto2">
+      <img src="photo2.jpg" alt="Nuestra foto 2">
     </div>
     <div class="gallery-slide">
-      <img src="https://placehold.co/400x300/d6336c/white?text=Foto+3" alt="Foto3">
+      <img src="photo3.jpg" alt="Nuestra foto 3">
     </div>
     <div class="gallery-slide">
-      <img src="https://placehold.co/400x300/ffb6b9/white?text=Foto+4" alt="Foto4">
+      <img src="photo4.jpg" alt="Nuestra foto 4">
     </div>
     <div class="gallery-slide">
-      <img src="https://placehold.co/400x300/a61e4d/white?text=Foto+5" alt="Foto5">
+      <img src="photo5.jpg" alt="Nuestra foto 5">
     </div>
     
     <div class="gallery-nav">
@@ -399,7 +416,8 @@ h1 {
 </div>
 
 <audio id="music" loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  <source src="AmorMio.mp3" type="audio/mpeg">
+  Tu navegador no soporta el elemento de audio.
 </audio>
 <button id="musicBtn" onclick="toggleMusic()">🔇</button>
 
@@ -408,16 +426,35 @@ h1 {
 <script>
 // Variables
 const music = document.getElementById('music');
+const musicBtn = document.getElementById('musicBtn');
 const startHeart = document.getElementById('startHeart');
 const slides = document.querySelectorAll('.gallery-slide');
 const dots = document.querySelectorAll('.gallery-dot');
 let currentSlide = 0;
+let musicPlaying = false;
 
 // Iniciar todo al tocar corazón
 startHeart.addEventListener('click', () => {
-  music.play().catch(() => {});
-  startHeart.style.display = 'none';
-  generarEstrellas();
+  // Intentar reproducir música
+  const playPromise = music.play();
+  
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        musicPlaying = true;
+        musicBtn.textContent = '🔊';
+        startHeart.style.display = 'none';
+        generarEstrellas();
+      })
+      .catch(error => {
+        // En iOS, necesitamos una interacción del usuario para reproducir audio
+        console.log("Reproducción automática prevenida:", error);
+        musicBtn.textContent = '🔇';
+        startHeart.style.display = 'none';
+        generarEstrellas();
+        alert("Toca el botón de música en la esquina superior derecha para activar el sonido");
+      });
+  }
 });
 
 // Navegación de galería
@@ -446,11 +483,23 @@ function navGallery(direction) {
 // Música
 function toggleMusic() {
   if (music.paused) {
-    music.play(); 
-    musicBtn.textContent = '🔊';
+    const playPromise = music.play();
+    
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          musicPlaying = true;
+          musicBtn.textContent = '🔊';
+        })
+        .catch(error => {
+          console.log("Error al reproducir:", error);
+          musicBtn.textContent = '🔇';
+        });
+    }
   } else {
     music.pause(); 
     musicBtn.textContent = '🔇';
+    musicPlaying = false;
   }
 }
 
@@ -601,13 +650,22 @@ document.querySelector('.gallery-container').addEventListener('touchend', e => {
 });
 
 function handleSwipe() {
-  if (touchEndX < touchStartX) {
+  if (touchEndX < touchStartX - 50) {
     navGallery(1);
   }
-  if (touchEndX > touchStartX) {
+  if (touchEndX > touchStartX + 50) {
     navGallery(-1);
   }
 }
+
+// Precargar imágenes para mejor rendimiento
+window.addEventListener('load', () => {
+  const images = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg'];
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+});
 </script>
 </body>
 </html>
